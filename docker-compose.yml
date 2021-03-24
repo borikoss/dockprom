@@ -116,6 +116,7 @@ services:
       - "${LISTEN_IP}:9091:9091"
     volumes:
       - ./caddy:/etc/caddy
+      - ./caddy/resolv.conf:/etc/resolv.conf:ro
     restart: unless-stopped
     networks:
       - monitor-net
