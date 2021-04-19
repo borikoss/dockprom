@@ -43,7 +43,7 @@ services:
     labels:
       org.label-schema.group: "monitoring"
 
-  nodeexporter:
+  nodeexporter-1blu-16R-vm:
     image: prom/node-exporter:v1.1.1
     container_name: nodeexporter
     volumes:
