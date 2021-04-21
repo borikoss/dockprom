@@ -1,14 +1,14 @@
 groups:
 - name: targets
   rules:
-  - alert: monitor_service_down
-    expr: up == 0
-    for: 30s
+  - alert: service_down
+    expr: up{job=~"wordpress|nodeexporter"} == 0
+    for: 45s
     labels:
       severity: critical
     annotations:
       summary: "Monitor service non-operational"
-      description: "Service {{ $labels.instance }} is down."
+      description: "Service instance {{ $labels.instance }} of job {{ $labels.job }} is down."
 
 - name: host
   rules:
@@ -41,30 +41,29 @@ groups:
 
 - name: containers
   rules:
-  - alert: jenkins_down
-    expr: absent(container_memory_usage_bytes{name="jenkins"})
+  - alert: grafana_down
+    expr: absent(container_memory_usage_bytes{name="grafana"})
     for: 30s
     labels:
       severity: critical
     annotations:
-      summary: "Jenkins down"
-      description: "Jenkins container is down for more than 30 seconds."
+      summary: "grafana down"
+      description: "grafana container is down for more than 30 seconds."
 
-  - alert: jenkins_high_cpu
-    expr: sum(rate(container_cpu_usage_seconds_total{name="jenkins"}[1m])) / count(node_cpu_seconds_total{mode="system"}) * 100 > 10
+  - alert: grafana_high_cpu
+    expr: sum(rate(container_cpu_usage_seconds_total{name="grafana"}[1m])) / count(node_cpu_seconds_total{mode="system"}) * 100 > 10
     for: 30s
     labels:
       severity: warning
     annotations:
-      summary: "Jenkins high CPU usage"
-      description: "Jenkins CPU usage is {{ humanize $value}}%."
+      summary: "grafana high CPU usage"
+      description: "grafana CPU usage is {{ humanize $value}}%."
 
-  - alert: jenkins_high_memory
-    expr: sum(container_memory_usage_bytes{name="jenkins"}) > 1200000000
+  - alert: grafana_high_memory
+    expr: sum(container_memory_usage_bytes{name="grafana"}) > 1200000000
     for: 30s
     labels:
       severity: warning
     annotations:
-      summary: "Jenkins high memory usage"
-      description: "Jenkins memory consumption is at {{ humanize $value}}."
-
+      summary: "grafana high memory usage"
+      description: "grafana memory consumption is at {{ humanize $value}}."
