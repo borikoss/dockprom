@@ -19,6 +19,7 @@ services:
       - '--web.console.templates=/etc/prometheus/consoles'
       - '--storage.tsdb.retention.time=200h'
       - '--web.enable-lifecycle'
+      - '--web.external-url=${EXTERNAL_URL}:9090'
     restart: unless-stopped
     expose:
       - 9090
@@ -35,6 +36,7 @@ services:
     command:
       - '--config.file=/etc/alertmanager/config.yml'
       - '--storage.path=/alertmanager'
+      - '--web.external-url=${EXTERNAL_URL}:9093'
     restart: unless-stopped
     expose:
       - 9093

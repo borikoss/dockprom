@@ -14,14 +14,35 @@ rule_files:
 # A scrape configuration containing exactly one endpoint to scrape.
 scrape_configs:
   - job_name: 'nodeexporter'
-    scrape_interval: 5s
+    scrape_interval: 15s
     static_configs:
-      - targets: ['nodeexporter-1blu-16R-vm:9100']
+      - targets:
+          - nodeexporter-1blu-16R-vm:9100
+          - kossev-it-berater.com
+          - mail.kossev-it-berater.com
+
+  - job_name: 'wordpress'
+    scrape_interval: 15s
+    metrics_path: /wp-json/metrics
+    static_configs:
+      - targets:
+          - www.kossev-it-berater.com
+          - www.simplylovelychaos.de
+          - www.kabbalisten.de
+          - www.kabbala-ru.de
+          - sohar.kabbalisten.de
+          - tora.kabbalisten.de
 
   - job_name: 'cadvisor'
-    scrape_interval: 5s
+    scrape_interval: 15s
     static_configs:
       - targets: ['cadvisor:8080']
+
+  - job_name: 'cadvisor-web'
+    scrape_interval: 15s
+    metrics_path: /cd-metrics
+    static_configs:
+      - targets: ['www.kossev-it-berater.com']
 
   - job_name: 'prometheus'
     scrape_interval: 10s
