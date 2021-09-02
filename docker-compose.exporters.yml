@@ -5,6 +5,8 @@ services:
   nodeexporter:
     image: prom/node-exporter:v1.1.1
     container_name: nodeexporter
+    ports:
+      - "127.0.0.1:9100:9100"
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
@@ -15,22 +17,21 @@ services:
       - '--path.sysfs=/host/sys'
       - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
     restart: unless-stopped
-    network_mode: host
     labels:
       org.label-schema.group: "monitoring"
 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:v0.38.8
     container_name: cadvisor
+    ports:
+      - "127.0.0.1:8080:8080"
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:rw
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
       - /cgroup:/cgroup:ro
+    command: --storage_duration=2m0s
     restart: unless-stopped
-    network_mode: host
     labels:
       org.label-schema.group: "monitoring"
-  
-
